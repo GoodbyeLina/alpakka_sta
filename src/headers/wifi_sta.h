@@ -24,30 +24,33 @@ typedef struct {
 #endif
 
 // 声明全局变量
-extern bool wifi_comm_allowed;
-extern bool keyboard_synced;
-extern bool mouse_synced;
-extern bool gamepad_synced;
+// 定义全局变量
+extern bool hid_allow_communication = true;
+extern bool synced_keyboard = false;
+extern bool synced_mouse = false;
+extern bool synced_gamepad = false;
 
-extern uint8_t current_alarms;
-extern uint8_t alarm_pool_status;
+extern uint16_t alarms = 0;
+extern alarm_pool_t *alarm_pool;
 
-extern uint8_t wifi_matrix_copy[MATRIX_ROWS][MATRIX_COLS];
+extern uint8_t state_matrix[256] = {
+    0,
+};
 
-extern int16_t mouse_pos_x;
-extern int16_t mouse_pos_y;
+extern int16_t mouse_x = 0;
+extern int16_t mouse_y = 0;
 
-extern int16_t gamepad_left_x;
-extern int16_t gamepad_left_y;
-extern int16_t gamepad_right_x;
-extern int16_t gamepad_right_y;
-extern int16_t gamepad_left_z;
-extern int16_t gamepad_right_z;
+extern double gamepad_lx = 0;
+extern double gamepad_ly = 0;
+extern double gamepad_rx = 0;
+extern double gamepad_ry = 0;
+extern double gamepad_lz = 0;
+extern double gamepad_rz = 0;
 
-extern int16_t gamepad_gyro_data;
-extern int16_t gamepad_accel_data;
+extern Vector gamepad_gyro = 0;
+extern Vector gamepad_accel = 0;
 
-extern bool switch_pro_usb_status;
+extern SwitchProUsb switchProUsb;
 
 bool sendCMD(const char *cmd, const char *act);
 void connectToWifi();

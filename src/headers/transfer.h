@@ -12,6 +12,7 @@
 #include "bus.h"
 #include "pin.h"
 #include "common.h"
+#include "switch_pro.h"
 
 
 typedef struct {
@@ -36,7 +37,7 @@ typedef struct {
     Vector gamepad_accel;  // Assuming this is a custom struct or typedef.
     // bool synced_switch_pro;
     // input_report_t switch_pro_gamepad_data;
-    // SwitchProUsb switchProUsb;  // Assuming this is another custom struct or typedef.
+    SwitchProUsb switchProUsb;  // Assuming this is another custom struct or typedef.
 } transfer_struct;
 
 // void wifi_thanks();

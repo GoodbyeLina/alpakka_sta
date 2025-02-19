@@ -71,7 +71,7 @@ void wifi_press(uint8_t key)
         else
             transfer.synced_keyboard = false;
     }
-    sendPacketOverWiFi(transfer);;
+    sendPacketOverWiFi(transfer);
 }
 
 void wifi_press_multiple(uint8_t *keys)
@@ -107,7 +107,7 @@ void wifi_release(uint8_t key)
             else
                 transfer.synced_keyboard = false;
             }
-        sendPacketOverWiFi(transfer);;
+        sendPacketOverWiFi(transfer);
 
     }
 }
@@ -134,7 +134,7 @@ void wifi_gamepad_lx(double value)
         return;
         transfer.gamepad_lx += value; // Multiple inputs can be combined.
         transfer.synced_gamepad = false;
-        sendPacketOverWiFi(transfer);;
+        sendPacketOverWiFi(transfer);
 
 }
 
@@ -144,7 +144,7 @@ void wifi_gamepad_ly(double value)
         return;
     transfer.gamepad_ly += value; // Multiple inputs can be combined.
     transfer.synced_gamepad = false;
-    sendPacketOverWiFi(transfer);;
+    sendPacketOverWiFi(transfer);
 
 }
 
@@ -154,7 +154,7 @@ void wifi_gamepad_lz(double value)
         return;
         transfer.gamepad_lz += value; // Multiple inputs can be combined.
     transfer.synced_gamepad = false;
-    sendPacketOverWiFi(transfer);;
+    sendPacketOverWiFi(transfer);
 
 }
 
@@ -164,7 +164,7 @@ void wifi_gamepad_rx(double value)
         return;
         transfer.gamepad_rx += value; // Multiple inputs can be combined.
     transfer.synced_gamepad = false;
-    sendPacketOverWiFi(transfer);;
+    sendPacketOverWiFi(transfer);
 
 }
 
@@ -174,7 +174,7 @@ void wifi_gamepad_ry(double value)
         return;
         transfer.gamepad_ry += value; // Multiple inputs can be combined.
     transfer.synced_gamepad = false;
-    sendPacketOverWiFi(transfer);;
+    sendPacketOverWiFi(transfer);
 
 }
 
@@ -184,7 +184,7 @@ void wifi_gamepad_rz(double value)
         return;
         transfer.gamepad_rz += value; // Multiple inputs can be combined.
     transfer.synced_gamepad = false;
-    sendPacketOverWiFi(transfer);;
+    sendPacketOverWiFi(transfer);
 
 }
 
@@ -198,7 +198,7 @@ void wifi_mouse_move(int16_t x, int16_t y)
     transfer.mouse_x += x;
     transfer.mouse_y += y;
     transfer.synced_mouse = false;
-    sendPacketOverWiFi(transfer);;
+    sendPacketOverWiFi(transfer);
 
 }
 
@@ -258,7 +258,7 @@ void wifi_release_later_callback(alarm_id_t alarm, uint8_t key)
     alarm_pool_cancel_alarm(transfer.alarm_pool, alarm);
     wifi_release(key);
     transfer.alarms++;
-    sendPacketOverWiFi(transfer);;
+    sendPacketOverWiFi(transfer);
 
 }
 
@@ -267,7 +267,7 @@ void wifi_press_multiple_later_callback(alarm_id_t alarm, uint8_t *keys)
     alarm_pool_cancel_alarm(transfer.alarm_pool, alarm);
     wifi_press_multiple(keys);
     transfer.alarms++;
-    sendPacketOverWiFi(transfer);;
+    sendPacketOverWiFi(transfer);
 
 }
 
@@ -276,7 +276,7 @@ void wifi_release_multiple_later_callback(alarm_id_t alarm, uint8_t *keys)
     alarm_pool_cancel_alarm(transfer.alarm_pool, alarm);
     wifi_release_multiple(keys);
     transfer.alarms++;
-    sendPacketOverWiFi(transfer);;
+    sendPacketOverWiFi(transfer);
 
 }
 
@@ -323,7 +323,7 @@ void wifi_gamepad_gyro(double x, double y, double z)
         transfer.synced_gamepad = false;
         // synced_gamepad_gyroscope = false;
     };
-    sendPacketOverWiFi(transfer);;
+    sendPacketOverWiFi(transfer);
 
 }
 
@@ -350,6 +350,6 @@ void wifi_gamepad_accel(double x, double y, double z)
         transfer.synced_gamepad = false;
         // synced_gamepad_gyroscope = false;
     };
-    sendPacketOverWiFi(transfer);;
+    sendPacketOverWiFi(transfer);
 
 }

@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "vector.h": "c",
+        "thanks.h": "c",
+        "util.h": "c",
+        "mouse.h": "c"
+    }
+}

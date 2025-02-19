@@ -235,7 +235,7 @@ void Button__handle_hold_double(Button *self)
         bool is_double_press = elapsed < (double_time * 1000);
         if (is_double_press)
         {
-            // The press is considered a double press.
+            // 触发双击动作.
             self->state_terciary = true;
             wifi_press_multiple(self->actions_terciary);
         }
@@ -246,14 +246,14 @@ void Button__handle_hold_double(Button *self)
             {
                 if (immediate && !self->emitted_primary)
                 {
-                    // Trigger primary immediately.
+                    // 触发立即动作.
                     wifi_press_multiple(self->actions);
                     self->emitted_primary = true;
                 }
                 uint64_t timeout = time_us_64() > self->press_timestamp + (hold_time * 1000);
                 if (timeout)
                 {
-                    // It has been held so long that is considered held.
+                    // 触发长按动作.
                     wifi_press_multiple(self->actions_secondary);
                     self->state_secondary = true;
                 }

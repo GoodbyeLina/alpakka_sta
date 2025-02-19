@@ -3,11 +3,14 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "stdbool.h"
 #include "uart_esp.h"
 #include "uart.h"
 #include "wifi_sta.h"
 #include "led.h"
 #include "transfer.h"
+#include "vector.h"
+#include "switch_pro.h"
 
 // char SSID[] = "HUAWEI-CR18QS";
 char SSID[] = "OnePlus Ace 3";
@@ -22,30 +25,33 @@ char uart_command[50] = "";
 // int port;
 
 // 定义全局变量
-bool wifi_comm_allowed = false;
-bool keyboard_synced = false;
-bool mouse_synced = false;
-bool gamepad_synced = false;
+bool hid_allow_communication = true;
+bool synced_keyboard = false;
+bool synced_mouse = false;
+bool synced_gamepad = false;
 
-uint8_t current_alarms = 0;
-uint8_t alarm_pool_status = 0;
+uint16_t alarms = 0;
+alarm_pool_t *alarm_pool;
 
-uint8_t wifi_matrix_copy[MATRIX_ROWS][MATRIX_COLS] = {0};
+uint8_t state_matrix[256] = {
+    0,
+};
 
-int16_t mouse_pos_x = 0;
-int16_t mouse_pos_y = 0;
+int16_t mouse_x = 0;
+int16_t mouse_y = 0;
 
-int16_t gamepad_left_x = 0;
-int16_t gamepad_left_y = 0;
-int16_t gamepad_right_x = 0;
-int16_t gamepad_right_y = 0;
-int16_t gamepad_left_z = 0;
-int16_t gamepad_right_z = 0;
+double gamepad_lx = 0;
+double gamepad_ly = 0;
+double gamepad_rx = 0;
+double gamepad_ry = 0;
+double gamepad_lz = 0;
+double gamepad_rz = 0;
 
-int16_t gamepad_gyro_data = 0;
-int16_t gamepad_accel_data = 0;
+Vector gamepad_gyro = 0;
+Vector gamepad_accel = 0;
 
-bool switch_pro_usb_status = false;
+SwitchProUsb switchProUsb;
+
 
 bool sendCMD(const char *cmd, const char *act)
 {
@@ -441,39 +447,38 @@ transfer_struct receivePacketOverWiFi() {
 // 处理接收到的数据包
 void process_received_packet(transfer_struct received_packet) {
     // 通信状态标志
-    bool wifi_comm_allowed = received_packet.wifi_allow_communication;
+    hid_allow_communication = received_packet.wifi_allow_communication;
     
     // 同步状态
-    bool keyboard_synced = received_packet.synced_keyboard;
-    bool mouse_synced = received_packet.synced_mouse;
-    bool gamepad_synced = received_packet.synced_gamepad;
+    synced_keyboard = received_packet.synced_keyboard;
+    synced_mouse = received_packet.synced_mouse;
+    synced_gamepad = received_packet.synced_gamepad;
     
     // 警报相关
-    uint8_t current_alarms = received_packet.alarms;
-    uint8_t alarm_pool_status = received_packet.alarm_pool;
+    alarms = received_packet.alarms;
+    alarm_pool = received_packet.alarm_pool;
     
     // 复制WiFi矩阵
-    uint8_t wifi_matrix_copy[MATRIX_ROWS][MATRIX_COLS];
-    memcpy(wifi_matrix_copy, received_packet.wifi_matrix, sizeof(wifi_matrix_copy));
+    memcpy(state_matrix, received_packet.wifi_matrix, sizeof(state_matrix));
     
     // 鼠标数据
-    int16_t mouse_pos_x = received_packet.mouse_x;
-    int16_t mouse_pos_y = received_packet.mouse_y;
+    mouse_x = received_packet.mouse_x;
+    mouse_y = received_packet.mouse_y;
     
     // 游戏手柄数据
-    int16_t gamepad_left_x = received_packet.gamepad_lx;
-    int16_t gamepad_left_y = received_packet.gamepad_ly;
-    int16_t gamepad_right_x = received_packet.gamepad_rx;
-    int16_t gamepad_right_y = received_packet.gamepad_ry;
-    int16_t gamepad_left_z = received_packet.gamepad_lz;
-    int16_t gamepad_right_z = received_packet.gamepad_rz;
+    gamepad_lx = received_packet.gamepad_lx;
+    gamepad_ly = received_packet.gamepad_ly;
+    gamepad_rx = received_packet.gamepad_rx;
+    gamepad_ry = received_packet.gamepad_ry;
+    gamepad_lz = received_packet.gamepad_lz;
+    gamepad_rz = received_packet.gamepad_rz;
     
     // 陀螺仪和加速度计数据
-    int16_t gamepad_gyro_data = received_packet.gamepad_gyro;
-    int16_t gamepad_accel_data = received_packet.gamepad_accel;
+    gamepad_gyro = received_packet.gamepad_gyro;
+    gamepad_accel = received_packet.gamepad_accel;
     
     // Switch Pro控制器USB状态
-    bool switch_pro_usb_status = received_packet.switchProUsb;
+    switchProUsb = received_packet.switchProUsb;
     
     // 打印接收到的数据（用于调试）
     printf("WiFi通信状态: %d\n", wifi_comm_allowed);
